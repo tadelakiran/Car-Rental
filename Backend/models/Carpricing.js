@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const carPricingSchema = new mongoose.Schema(
   {
@@ -12,5 +12,4 @@ const carPricingSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-export default mongoose.model("CarPricing", carPricingSchema);
+module.exports= mongoose.model("CarPricing", carPricingSchema);

@@ -8,6 +8,9 @@ var cors = require('cors');
 
 var app = express();
 
+const authRoutes = require('./routers/authRoutes');
+const userRoutes = require('./routers/userRoutes');
+
 const connectDB = require('./db/connection');
 connectDB();
 const PORT = process.env.PORT || 1252;
@@ -19,6 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+
 app.listen(PORT , ()=>{
   console.log(`Server is running on port ${PORT}`);
 })

@@ -60,16 +60,19 @@ const refresh = async (req, res) => {
     const token = req.cookies.refreshToken;
     if (!token) return res.status(401).json({ message: "No token provided" });
 
-    const stored = await RefreshToken.findOne({ user: req.user?.id });
+    // Find stored hashed token in DB
+    const stored = await RefreshToken.findOne({});
     if (!stored) return res.status(403).json({ message: "Token not found" });
 
     const isValid = await bcrypt.compare(token, stored.tokenHash);
     if (!isValid) return res.status(403).json({ message: "Invalid refresh token" });
 
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    // Verify refresh token
+    jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
       if (err) return res.status(403).json({ message: "Invalid refresh token" });
 
-      const newAccessToken = generateAccessToken({ _id: decoded.id, role: decoded.role });
+      // Generate new access token
+      const newAccessToken = generateAccessToken({ id: decoded.id, role: decoded.role });
       res.json({ accessToken: newAccessToken });
     });
   } catch (err) {
@@ -77,14 +80,20 @@ const refresh = async (req, res) => {
   }
 };
 
+
 const logout = async (req, res) => {
   try {
+    const token = req.cookies.refreshToken;
+    if (token) {
+      const stored = await RefreshToken.findOne({});
+      if (stored) await RefreshToken.deleteMany({}); // remove token from DB
+    }
     res.clearCookie("refreshToken");
-    await RefreshToken.deleteMany({ user: req.user.id });
     res.json({ message: "Logged out successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 module.exports = { register, login, refresh, logout };

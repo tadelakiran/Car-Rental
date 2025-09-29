@@ -12,9 +12,12 @@ const carImages = [
 const Login = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmError, setConfirmError] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,7 +25,6 @@ const Login = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-
 
   const validatePassword = (value) => {
     if (value.length < 8) {
@@ -40,11 +42,26 @@ const Login = () => {
     const value = e.target.value;
     setPassword(value);
     validatePassword(value);
+
+    if (confirmPassword && value !== confirmPassword) {
+      setConfirmError("Passwords do not match.");
+    } else {
+      setConfirmError("");
+    }
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    if (password !== value) {
+      setConfirmError("Passwords do not match.");
+    } else {
+      setConfirmError("");
+    }
   };
 
   return (
     <div className="login-container">
-    
       <div className="login-image">
         <div
           className="carousel-slide"
@@ -59,7 +76,6 @@ const Login = () => {
           </h2>
         </div>
 
-
         <div className="carousel-dots">
           {carImages.map((_, idx) => (
             <span
@@ -70,7 +86,6 @@ const Login = () => {
           ))}
         </div>
       </div>
-
 
       <div className="login-form">
         <h2>Create an account</h2>
@@ -84,7 +99,6 @@ const Login = () => {
             <input type="text" placeholder="Last name" required />
           </div>
 
-       
           <div className="form-row">
             <input type="email" placeholder="Email" required />
             <div className="phone-input-wrapper">
@@ -99,31 +113,51 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="password-input">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onChange={handlePasswordChange}
-              required
-            />
-            <span
-              className="eye-icon"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
+          {/* ✅ Password & Confirm Password side by side */}
+          <div className="form-row">
+            <div className="password-input">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+
+            <div className="password-input">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                required
+              />
+              <span
+                className="eye-icon"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
           </div>
+
           {passwordError && <p className="error-text">{passwordError}</p>}
+          {confirmError && <p className="error-text">{confirmError}</p>}
 
-                 <div className="checkbox">
-                         <label htmlFor="terms">
-                            <input type="checkbox" id="terms" required />
-                               <span></span> I agree to the <a href="/terms">Terms & Conditions</a>
-                        </label>
-                </div>
-
-
+          <div className="checkbox">
+            <label htmlFor="terms">
+              <input type="checkbox" id="terms" required />
+              <span></span> I agree to the{" "}
+              <a href="/terms">Terms & Conditions</a>
+            </label>
+          </div>
 
           <button type="submit" className="btn-primary">
             Create account

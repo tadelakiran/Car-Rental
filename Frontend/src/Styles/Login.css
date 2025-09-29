@@ -1,20 +1,28 @@
+/* ---------- CORE RESET ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   overflow: hidden;
+  font-family: "Poppins", sans-serif;
 }
 
+/* ---------- MAIN CONTAINER ---------- */
 .login-container {
   display: flex;
   height: 100vh;
   width: 100vw;
   background: #1a1a2e;
   color: white;
-  font-family: "Poppins", sans-serif;
 }
 
+/* ---------- LEFT IMAGE / CAROUSEL ---------- */
 .login-image {
   flex: 1;
   position: relative;
@@ -24,7 +32,6 @@ html, body {
   color: white;
   overflow: hidden;
 }
-
 .carousel-slide {
   position: absolute;
   inset: 0;
@@ -33,7 +40,6 @@ html, body {
   transition: opacity 1s ease-in-out;
   z-index: 1;
 }
-
 .back-btn {
   z-index: 2;
   align-self: flex-end;
@@ -50,21 +56,18 @@ html, body {
 .back-btn:hover {
   background: rgba(255, 255, 255, 0.4);
 }
-
 .overlay-text {
   position: absolute;
   bottom: 40px;
   left: 40px;
   z-index: 2;
   font-weight: bolder;
-  
 }
 .overlay-text h2 {
   font-size: 30px;
   font-weight: 500;
   line-height: 1.4;
 }
-
 .carousel-dots {
   position: absolute;
   bottom: 15px;
@@ -88,7 +91,7 @@ html, body {
   border-radius: 12px;
 }
 
-
+/* ---------- RIGHT FORM ---------- */
 .login-form {
   flex: 1;
   background: #2c2c54;
@@ -98,12 +101,10 @@ html, body {
   padding: 50px;
   overflow: hidden;
 }
-
 .login-form h2 {
   font-size: 2rem;
   margin-bottom: 10px;
 }
-
 .login-link {
   margin-bottom: 25px;
   font-size: 0.9rem;
@@ -113,62 +114,60 @@ html, body {
   text-decoration: none;
 }
 
-
+/* ---------- FORM ---------- */
 form {
   display: flex;
   flex-direction: column;
 }
-
 .form-row {
   display: flex;
   gap: 12px;
   margin-bottom: 12px;
-  /* border: 2px solid red; */
- 
+  align-items: stretch;
 }
 
-
-form input {
-  padding: 14px;
+/* ---------- INPUT BASE ---------- */
+form input,
+.phone-input-wrapper,
+.password-input {
+  height: 56px;           /* ✅ fixed height for consistency */
   border-radius: 8px;
-  border: 2px solid transparent;
-  outline: none;
   font-size: 0.95rem;
-  flex: 1;
   background: #1e1e3c;
   color: white;
   transition: all 0.3s ease;
-  height: 20px;
 }
 
+form input {
+  padding: 0 14px;
+  border: 2px solid transparent;
+  outline: none;
+  flex: 1;
+}
 form input:focus {
   border: 2px solid #6c5ce7;
   box-shadow: 0 0 6px rgba(108, 92, 231, 0.6);
 }
-
 form input::placeholder {
   color: #aaa;
 }
 
-
 .phone-input-wrapper {
   display: flex;
   align-items: center;
-  background: #1e1e3c;
-  border-radius: 8px;
-  flex: 1;
-  padding-left: 10px;
   border: 2px solid transparent;
-  transition: all 0.3s ease;
+  padding-left: 12px;
+  flex: 1;
 }
 .phone-input-wrapper:focus-within {
   border: 2px solid #6c5ce7;
   box-shadow: 0 0 6px rgba(108, 92, 231, 0.6);
 }
 .phone-input-wrapper .flag {
-  margin-right: 8px;
+  margin-right: 12px;
   font-size: 0.95rem;
   white-space: nowrap;
+  color: #fff;
 }
 .phone-input-wrapper input {
   background: transparent;
@@ -176,25 +175,27 @@ form input::placeholder {
   outline: none;
   color: white;
   font-size: 0.95rem;
-  padding: 14px;
+  padding: 0 14px;
+  height: 100%;
   flex: 1;
 }
 
-
+/* ---------- PASSWORD INPUT ---------- */
 .password-input {
   position: relative;
-  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 .password-input input {
-  width: 96%;
-  padding: 14px;
-  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 0 48px 0 14px; /* ✅ space for eye icon */
   border: 2px solid transparent;
+  border-radius: 8px;
   background: #1e1e3c;
   color: white;
   font-size: 0.95rem;
-  transition: all 0.3s ease;
-  /* border: 2px solid red; */
 }
 .password-input input:focus {
   border: 2px solid #6c5ce7;
@@ -202,23 +203,26 @@ form input::placeholder {
 }
 .eye-icon {
   position: absolute;
-  right: 20px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   color: #aaa;
   font-size: 1.1rem;
+  z-index: 2;
 }
+
+/* ---------- ERRORS ---------- */
 .error-text {
   color: #ff7675;
   font-size: 0.8rem;
   margin: -5px 0 10px;
 }
 
+/* ---------- CHECKBOX ---------- */
 .checkbox {
   display: flex;
   align-items: center;
-  text-align: center;
   margin: 15px 0;
   font-size: 0.9rem;
   padding-left: 10px;
@@ -226,20 +230,20 @@ form input::placeholder {
 .checkbox input {
   width: 16px;
   height: 16px;
-  margin: 0px;
+  margin: 0;
 }
 .checkbox a {
   color: #6c5ce7;
   text-decoration: none;
 }
 .checkbox label {
-  margin: 0;  
+  margin: 0;
   gap: 6px;
   display: flex;
   align-items: center;
 }
 
-
+/* ---------- BUTTONS ---------- */
 .btn-primary {
   background: #6c5ce7;
   border: none;
@@ -255,20 +259,18 @@ form input::placeholder {
   background: #4834d4;
 }
 
+/* ---------- SOCIAL ---------- */
 .or-text {
   text-align: center;
   margin: 20px 0;
   font-size: 0.9rem;
   color: #aaa;
 }
-
-
 .social-login {
   display: flex;
   gap: 15px;
   justify-content: center;
 }
-
 .social-login button {
   flex: 1;
   padding: 12px;
@@ -277,13 +279,11 @@ form input::placeholder {
   cursor: pointer;
   font-weight: 500;
   font-size: 0.9rem;
-  transition: 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 }
-
 .google-btn {
   background: #fff;
   color: #333;
@@ -293,28 +293,57 @@ form input::placeholder {
   color: white;
 }
 
+/* ---------- RESPONSIVE BREAKPOINTS ---------- */
+@media (max-width: 1200px) {
+  .login-form {
+    padding: 40px;
+  }
+  .overlay-text h2 {
+    font-size: 26px;
+  }
+}
 
-@media screen and (max-width: 900px) {
+@media (max-width: 900px) {
   .login-container {
     flex-direction: column;
     height: 100vh;
   }
-
   .login-image {
     height: 40vh;
   }
-
   .overlay-text {
     bottom: 20px;
     left: 20px;
   }
-
   .login-form {
     padding: 30px 20px;
-    height: 60vh;
+    height: auto;
   }
-
   .form-row {
     flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-form h2 {
+    font-size: 1.6rem;
+  }
+  form input,
+  .phone-input-wrapper,
+  .password-input {
+    height: 52px; /* slightly smaller for small screens */
+  }
+}
+
+@media (max-width: 400px) {
+  .login-form {
+    padding: 20px 15px;
+  }
+  .login-form h2 {
+    font-size: 1.4rem;
+  }
+  .overlay-text h2 {
+    font-size: 20px;
   }
 }

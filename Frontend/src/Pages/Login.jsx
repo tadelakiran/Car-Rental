@@ -24,11 +24,12 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <div className="login-image">
+      {/* LEFT IMAGE CAROUSEL */}
+      <aside className="login-image" aria-hidden="true">
         <div
           className="carousel-slide"
           style={{ backgroundImage: `url(${carImages[currentImage]})` }}
-        ></div>
+        />
         <button className="back-btn">Back to website →</button>
         <div className="overlay-text">
           <h2>
@@ -38,62 +39,73 @@ const Login = () => {
         </div>
         <div className="carousel-dots">
           {carImages.map((_, idx) => (
-            <span
+            <button
               key={idx}
               className={`dot ${currentImage === idx ? "active" : ""}`}
               onClick={() => setCurrentImage(idx)}
-            ></span>
+              aria-label={`Slide ${idx + 1}`}
+            />
           ))}
         </div>
-      </div>
+      </aside>
 
-      <div className="login-form">
+      {/* RIGHT FORM */}
+      <main className="login-form" role="main">
         {formType === "signup" && (
-          <div className="signup-form">
+          <section className="signup-form">
             <h2>Create an account</h2>
             <p className="login-link">
               Already have an account?{" "}
-              <span className="switch-link" onClick={() => setFormType("login")}>
+              <button
+                type="button"
+                className="switch-link"
+                onClick={() => setFormType("login")}
+              >
                 Log in
-              </span>
+              </button>
             </p>
 
             <form>
-              <div className="form-row">
-                <input type="text" placeholder="First name" required />
-                <input type="text" placeholder="Last name" required />
+              <div className="form-row two-cols">
+                <input className="input" type="text" placeholder="First name" required />
+                <input className="input" type="text" placeholder="Last name" required />
               </div>
 
-              <div className="form-row">
-                <input type="email" placeholder="Email" required />
+              <div className="form-row email-phone">
+                <input className="input" type="email" placeholder="Email" required />
                 <div className="phone-input-wrapper">
                   <span className="flag">+91</span>
-                  <input type="tel" placeholder="Phone number" maxLength="10" />
+                  <input className="input phone-input" type="tel" placeholder="Phone number" maxLength="10" />
                 </div>
               </div>
 
               <div className="form-row">
                 <div className="password-input">
                   <input
+                    className="input"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
-                  <span
+                  <button
+                    type="button"
                     className="eye-icon"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => setShowPassword((s) => !s)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
+                  </button>
                 </div>
               </div>
 
               <div className="checkbox">
                 <label>
-                  <input type="checkbox" required /> I agree to the{" "}
-                  <a href="/terms">Terms & Conditions</a>
+                  <input type="checkbox" required />
+                  <span className="terms-text">
+                    I agree to the <a href="/terms">Terms &amp; Conditions</a>
+                  </span>
                 </label>
               </div>
 
@@ -101,41 +113,38 @@ const Login = () => {
                 Create account
               </button>
             </form>
-          </div>
+          </section>
         )}
 
         {formType === "login" && (
-          <div className="login-only">
+          <section className="login-only">
             <h2>Welcome back</h2>
             <p className="login-link">
               Don’t have an account?{" "}
-              <span className="switch-link" onClick={() => setFormType("signup")}>
+              <button className="switch-link" onClick={() => setFormType("signup")}>
                 Sign up
-              </span>
+              </button>
             </p>
 
             <form>
-              <input
-                type="text"
-                placeholder="Email or Phone number"
-                className="login-input"
-                required
-              />
+              <input className="input" type="text" placeholder="Email or Phone number" required />
+
               <div className="password-input">
                 <input
+                  className="input"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="login-input"
                 />
-                <span
+                <button
+                  type="button"
                   className="eye-icon"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword((s) => !s)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
+                </button>
               </div>
 
               <div className="forgot-password">
@@ -148,44 +157,50 @@ const Login = () => {
             </form>
 
             <p className="or-text">Or</p>
-            <button className="btn-primary" onClick={() => setFormType("otp")}>
+            <button className="btn-primary outline" onClick={() => setFormType("otp")}>
               Login with OTP
             </button>
-          </div>
+          </section>
         )}
 
         {formType === "otp" && (
-          <div className="otp-form">
+          <section className="otp-form">
             <h2>Login with OTP</h2>
             <p className="login-link">
-              <span className="switch-link" onClick={() => setFormType("login")}>
+              <button className="switch-link" onClick={() => setFormType("login")}>
                 ← Back to Login
-              </span>
+              </button>
             </p>
 
             <form>
               <div className="phone-input-wrapper">
                 <span className="flag">+91</span>
-                <input type="tel" placeholder="Phone number" maxLength="10" />
+                <input className="input phone-input" type="tel" placeholder="Phone number" maxLength="10" />
               </div>
-              <input type="text" placeholder="Enter OTP" maxLength="6" />
+
+              <input className="input" type="text" placeholder="Enter OTP" maxLength="6" />
+
               <button type="submit" className="btn-primary">
                 Verify OTP
               </button>
             </form>
-          </div>
+          </section>
         )}
 
         <p className="or-text">Or continue with</p>
+
         <div className="social-login">
-          <button className="google-btn">
-            <FcGoogle size={20} /> Google
+          <button className="social-btn google-btn" type="button">
+            <span className="social-icon"><FcGoogle size={20} /></span>
+            <span className="social-label">Continue with Google</span>
           </button>
-          <button className="apple-btn">
-            <FaApple size={20} /> Apple
+
+          <button className="social-btn apple-btn" type="button">
+            <span className="social-icon"><FaApple size={20} /></span>
+            <span className="social-label">Continue with Apple</span>
           </button>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

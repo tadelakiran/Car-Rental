@@ -1,177 +1,126 @@
-*{
-  margin: 0px;
-  padding: 0px;
+/* ---------- Variables & Reset ---------- */
+:root{
+  --bg: #111217;
+  --card: #1b1830;
+  --muted: #9aa0b2;
+  --accent: #6b5cff;
+  --accent-hover: #5a4edc;
+  --input-bg: #1e1e2f;
+  --border: rgba(255,255,255,0.06);
+  --radius: 10px;
+  --focus-shadow: rgba(107,92,255,0.12);
 }
-.login-container {
-  display: flex;
-  height: 100vh;
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%}
+body{font-family:"Poppins",sans-serif;background:var(--bg);color:#fff}
+
+/* ---------- Layout ---------- */
+.login-container{
+  display:flex;
+  min-height:100vh;
+  align-items:stretch;
+  gap:0;
+}
+
+/* LEFT - carousel */
+.login-image{width:50%;position:relative;overflow:hidden;min-height:520px}
+.carousel-slide{position:absolute;inset:0;background-size:cover;background-position:center;transition:background-image .6s ease-in-out}
+.login-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,15,0.45) 0%,rgba(10,10,15,0.6) 100%);pointer-events:none}
+.overlay-text{position:absolute;left:48px;bottom:48px;max-width:420px;line-height:1.12;font-weight:600;font-size:1.9rem}
+.back-btn{position:absolute;top:18px;left:18px;background:rgba(0,0,0,0.45);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
+.back-btn:hover{color: black; font-weight: bolder; background-color: white;}
+.carousel-dots{position:absolute;left:48px;bottom:18px;display:flex;gap:8px}
+.carousel-dots .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.22);border:0;cursor:pointer}
+.carousel-dots .dot.active{background:var(--accent)}
+
+/* RIGHT - form */
+.login-form{width:50%;background:var(--card);padding:56px 64px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+
+/* Headings & links */
+.login-form h2{font-size:1.9rem;margin-bottom:6px}
+.login-link{color:var(--muted);font-size:.95rem;margin-bottom:18px}
+.switch-link{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-weight:600}
+
+/* ---------- Forms ---------- */
+form{display:flex;flex-direction:column;gap:14px}
+.form-row.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row.email-phone{display:grid;grid-template-columns:1fr 260px;gap:12px}
+
+/* Inputs - base */
+.input{width:100%;height:48px;padding:12px 14px;background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius);color:#fff;font-size:1rem;outline:none;transition:border-color .18s ease,box-shadow .18s ease,transform .06s ease}
+.input::placeholder{color:#8f92a3}
+.input:focus,.input:focus-visible{border-color:var(--accent);box-shadow:0 10px 30px var(--focus-shadow);outline:none}
+
+/* phone wrapper */
+.phone-input-wrapper{display:flex;align-items:center;border-radius:var(--radius);overflow:hidden;background:var(--input-bg);border:1px solid var(--border);height:48px;transition:border-color .18s ease,box-shadow .18s ease}
+.phone-input-wrapper:focus-within{border-color:var(--accent);box-shadow:0 10px 30px rgba(107,92,255,0.10)}
+.phone-input-wrapper .flag{padding:0 14px;background:#151520;color:#d6d8e8;white-space:nowrap;font-size:.95rem;display:inline-flex;align-items:center;height:48px;border-right:1px solid rgba(255,255,255,0.02)}
+.phone-input{border:0;background:transparent;padding:15px 14px;color:#fff;font-size:1rem;height:48px;outline:none;width:250px !important}
+.phone-input::placeholder{color:#8f92a3}
+
+/* password with eye icon */
+.password-input{position:relative;display:flex}
+.password-input .input{width:100%;padding-right:46px}
+.eye-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;color:#cfcfe0;cursor:pointer;height:36px;width:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center}
+
+/* checkbox + terms alignment */
+.checkbox label{display:inline-flex;align-items:center;gap:10px;cursor:pointer;color:var(--muted);font-size:.95rem}
+.checkbox input[type="checkbox"]{width:18px;height:18px;margin:0;accent-color:var(--accent)}
+
+/* primary button */
+.btn-primary{width:100%;height:52px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-size:1rem;font-weight:600;cursor:pointer}
+.btn-primary.outline{background:transparent;border:1px solid var(--border);color:var(--muted)}
+
+/* small helper links */
+.forgot-password{display:flex;justify-content:flex-end;margin-top:-6px}
+.forgot-password a{color:var(--accent);text-decoration:none;font-size:.95rem}
+
+/* or text */
+.or-text{color:var(--muted);text-align:center;margin:10px 0}
+
+/* social buttons */
+.social-login{display:flex;gap:12px;margin-top:6px}
+.social-btn{flex:1;display:flex;align-items:center;gap:12px;justify-content:center;height:48px;border-radius:12px;border:1px solid var(--border);background:transparent;cursor:pointer;font-weight:600}
+.google-btn{background:#fff;color:#222}
+.apple-btn{background:#000;color:#fff}
+.social-icon{display:inline-flex;align-items:center;justify-content:center}
+.social-label{display:inline-block}
+
+/* ---------- Scoped width changes for login & OTP only ---------- */
+.login-only form,
+.otp-form form {
+  max-width: 380px;
   width: 100%;
-  background: #111;
-  color: #fff;
-  font-family: "Poppins", sans-serif;
+  margin: 0 auto;
 }
-.login-image {
-  position: relative;
-  width: 50%;
-  overflow: hidden;
-}
-.carousel-slide {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-size: cover;
-  background-position: center;
-  transition: background-image 0.6s ease-in-out;
-}
-.overlay-text {
-  position: absolute;
-  bottom: 60px;
-  left: 40px;
-  font-size: 1.8rem;
-  line-height: 1.4;
-  max-width: 400px;
-}
-.back-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.carousel-dots {
-  position: absolute;
-  bottom: 20px;
-  left: 40px;
-  display: flex;
-  gap: 8px;
-}
-.carousel-dots .dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: #bbb;
-  cursor: pointer;
-}
-.carousel-dots .dot.active {
-  background: #fff;
-}
-.login-form {
-  width: 50%;
-  background: #1c1b2e;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.login-form h2 {
-  margin-bottom: 10px;
-}
-.login-link {
-  margin-bottom: 20px;
-  font-size: 0.95rem;
-}
-.switch-link {
-  color: #7c6cff;
-  cursor: pointer;
-}
-.btn-primary {
+.login-only .input,
+.login-only .phone-input-wrapper,
+.login-only .btn-primary,
+.login-only .social-btn,
+.otp-form .input,
+.otp-form .phone-input-wrapper,
+.otp-form .btn-primary,
+.otp-form .social-btn {
   width: 100%;
-  padding: 14px;
-  margin: 15px 0;
-  border: none;
-  border-radius: 6px;
-  background: #6b5cff;
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
 }
-.btn-primary:hover {
-  background: #5a4edc;
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px){
+  .login-container{flex-direction:column}
+  .login-image{width:100%;height:260px;min-height:0}
+  .login-form{width:100%;padding:32px 28px}
+  .form-row.two-cols{grid-template-columns:1fr 1fr}
+  .form-row.email-phone{grid-template-columns:1fr 180px}
 }
-.or-text {
-  text-align: center;
-  margin: 15px 0;
-  font-size: 0.9rem;
-  color: #aaa;
-}
-.social-login {
-  display: flex;
-  gap: 15px;
-}
-.social-login button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-.google-btn {
-  background: #fff;
-  color: #333;
-}
-.apple-btn {
-  background: #000;
-  color: #fff;
-}
-.signup-form input,
-.login-only .login-input,
-.otp-form input {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  border: 1px solid #555;
-  border-radius: 6px;
-  background: #1e1e2f;
-  color: #fff;
-  font-size: 1rem;
-}
-.signup-form .form-row {
-  display: flex;
-  gap: 10px;
-}
-.signup-form .form-row input {
-  flex: 1;
-}
-.signup-form .phone-input-wrapper,
-.otp-form .phone-input-wrapper {
-  display: flex;
-  align-items: center;
-  border: 1px solid #555;
-  border-radius: 6px;
-  overflow: hidden;
-}
-.signup-form .phone-input-wrapper .flag,
-.otp-form .phone-input-wrapper .flag {
-  padding: 0 10px;
-  background: #2a2a3d;
-  color: #ccc;
-}
-.signup-form .password-input,
-.login-only .password-input {
-  position: relative;
-}
-.signup-form .eye-icon,
-.login-only .eye-icon {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #bbb;
-}
-.login-only .forgot-password {
-  text-align: right;
-  margin: 5px 0 15px;
-}
-.login-only .forgot-password a {
-  color: #7c6cff;
-  font-size: 0.9rem;
-  text-decoration: none;
-}
-.login-only .forgot-password a:hover {
-  text-decoration: underline;
+@media (max-width: 680px){
+  .login-image{display:none}
+  .login-form{padding:24px 18px}
+  .form-row.two-cols{grid-template-columns:1fr}
+  .form-row.email-phone{grid-template-columns:1fr}
+  .overlay-text{left:16px;bottom:20px;font-size:1.2rem}
+  .social-login{flex-direction:column}
+  .social-btn{justify-content:flex-start;padding-left:14px}
+  .social-label{flex:1;text-align:left}
+  .login-form h2{font-size:1.5rem}
 }

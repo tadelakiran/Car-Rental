@@ -4,20 +4,16 @@ import { FcGoogle } from "react-icons/fc";
 import { FaApple, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const carImages = [
-  "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1920&q=80",
+  "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1920&q=80",
 ];
 
 const Login = () => {
   const [currentImage, setCurrentImage] = useState(0);
+  const [formType, setFormType] = useState("signup");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmError, setConfirmError] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,40 +22,6 @@ const Login = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const validatePassword = (value) => {
-    if (value.length < 8) {
-      setPasswordError("Password must be at least 8 characters long.");
-    } else if (!/[A-Za-z]/.test(value)) {
-      setPasswordError("Password must contain at least one letter.");
-    } else if (!/[0-9]/.test(value)) {
-      setPasswordError("Password must contain at least one number.");
-    } else {
-      setPasswordError("");
-    }
-  };
-
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-    validatePassword(value);
-
-    if (confirmPassword && value !== confirmPassword) {
-      setConfirmError("Passwords do not match.");
-    } else {
-      setConfirmError("");
-    }
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    const value = e.target.value;
-    setConfirmPassword(value);
-    if (password !== value) {
-      setConfirmError("Passwords do not match.");
-    } else {
-      setConfirmError("");
-    }
-  };
-
   return (
     <div className="login-container">
       <div className="login-image">
@@ -67,7 +29,6 @@ const Login = () => {
           className="carousel-slide"
           style={{ backgroundImage: `url(${carImages[currentImage]})` }}
         ></div>
-
         <button className="back-btn">Back to website →</button>
         <div className="overlay-text">
           <h2>
@@ -75,7 +36,6 @@ const Login = () => {
             <br /> Creating Memories
           </h2>
         </div>
-
         <div className="carousel-dots">
           {carImages.map((_, idx) => (
             <span
@@ -88,83 +48,135 @@ const Login = () => {
       </div>
 
       <div className="login-form">
-        <h2>Create an account</h2>
-        <p className="login-link">
-          Already have an account? <a href="/login">Log in</a>
-        </p>
-
-        <form>
-          <div className="form-row">
-            <input type="text" placeholder="First name" required />
-            <input type="text" placeholder="Last name" required />
-          </div>
-
-          <div className="form-row">
-            <input type="email" placeholder="Email" required />
-            <div className="phone-input-wrapper">
-              <span className="flag">+91</span>
-              <input
-                type="tel"
-                placeholder="Phone number"
-                pattern="[0-9]{10}"
-                maxLength="10"
-                required
-              />
-            </div>
-          </div>
-
-          {/* ✅ Password & Confirm Password side by side */}
-          <div className="form-row">
-            <div className="password-input">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter password"
-                value={password}
-                onChange={handlePasswordChange}
-                required
-              />
-              <span
-                className="eye-icon"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+        {formType === "signup" && (
+          <div className="signup-form">
+            <h2>Create an account</h2>
+            <p className="login-link">
+              Already have an account?{" "}
+              <span className="switch-link" onClick={() => setFormType("login")}>
+                Log in
               </span>
-            </div>
+            </p>
 
-            <div className="password-input">
+            <form>
+              <div className="form-row">
+                <input type="text" placeholder="First name" required />
+                <input type="text" placeholder="Last name" required />
+              </div>
+
+              <div className="form-row">
+                <input type="email" placeholder="Email" required />
+                <div className="phone-input-wrapper">
+                  <span className="flag">+91</span>
+                  <input type="tel" placeholder="Phone number" maxLength="10" />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="password-input">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+              </div>
+
+              <div className="checkbox">
+                <label>
+                  <input type="checkbox" required /> I agree to the{" "}
+                  <a href="/terms">Terms & Conditions</a>
+                </label>
+              </div>
+
+              <button type="submit" className="btn-primary">
+                Create account
+              </button>
+            </form>
+          </div>
+        )}
+
+        {formType === "login" && (
+          <div className="login-only">
+            <h2>Welcome back</h2>
+            <p className="login-link">
+              Don’t have an account?{" "}
+              <span className="switch-link" onClick={() => setFormType("signup")}>
+                Sign up
+              </span>
+            </p>
+
+            <form>
               <input
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm password"
-                value={confirmPassword}
-                onChange={handleConfirmPasswordChange}
+                type="text"
+                placeholder="Email or Phone number"
+                className="login-input"
                 required
               />
-              <span
-                className="eye-icon"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              <div className="password-input">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="login-input"
+                />
+                <span
+                  className="eye-icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+
+              <div className="forgot-password">
+                <a href="/forgot-password">Forgot password?</a>
+              </div>
+
+              <button type="submit" className="btn-primary">
+                Log in
+              </button>
+            </form>
+
+            <p className="or-text">Or</p>
+            <button className="btn-primary" onClick={() => setFormType("otp")}>
+              Login with OTP
+            </button>
+          </div>
+        )}
+
+        {formType === "otp" && (
+          <div className="otp-form">
+            <h2>Login with OTP</h2>
+            <p className="login-link">
+              <span className="switch-link" onClick={() => setFormType("login")}>
+                ← Back to Login
               </span>
-            </div>
+            </p>
+
+            <form>
+              <div className="phone-input-wrapper">
+                <span className="flag">+91</span>
+                <input type="tel" placeholder="Phone number" maxLength="10" />
+              </div>
+              <input type="text" placeholder="Enter OTP" maxLength="6" />
+              <button type="submit" className="btn-primary">
+                Verify OTP
+              </button>
+            </form>
           </div>
+        )}
 
-          {passwordError && <p className="error-text">{passwordError}</p>}
-          {confirmError && <p className="error-text">{confirmError}</p>}
-
-          <div className="checkbox">
-            <label htmlFor="terms">
-              <input type="checkbox" id="terms" required />
-              <span></span> I agree to the{" "}
-              <a href="/terms">Terms & Conditions</a>
-            </label>
-          </div>
-
-          <button type="submit" className="btn-primary">
-            Create account
-          </button>
-        </form>
-
-        <p className="or-text">Or register with</p>
+        <p className="or-text">Or continue with</p>
         <div className="social-login">
           <button className="google-btn">
             <FcGoogle size={20} /> Google

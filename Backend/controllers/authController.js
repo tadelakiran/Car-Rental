@@ -55,38 +55,41 @@ const login = async (req, res) => {
   }
 };
 
+// refresh
 const refresh = async (req, res) => {
   try {
     const token = req.cookies.refreshToken;
     if (!token) return res.status(401).json({ message: "No token provided" });
 
-    // Find stored hashed token in DB
-    const stored = await RefreshToken.findOne({});
+    // Verify JWT first to get user id
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    } catch {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    // Find stored token for this user
+    const stored = await RefreshToken.findOne({ userId: decoded.id });
     if (!stored) return res.status(403).json({ message: "Token not found" });
 
     const isValid = await bcrypt.compare(token, stored.tokenHash);
     if (!isValid) return res.status(403).json({ message: "Invalid refresh token" });
 
-    // Verify refresh token
-    jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
-      if (err) return res.status(403).json({ message: "Invalid refresh token" });
-
-      // Generate new access token
-      const newAccessToken = generateAccessToken({ id: decoded.id, role: decoded.role });
-      res.json({ accessToken: newAccessToken });
-    });
+    const newAccessToken = generateAccessToken({ id: decoded.id, role: decoded.role });
+    res.json({ accessToken: newAccessToken });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-
+// logout
 const logout = async (req, res) => {
   try {
     const token = req.cookies.refreshToken;
     if (token) {
-      const stored = await RefreshToken.findOne({});
-      if (stored) await RefreshToken.deleteMany({}); // remove token from DB
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+      await RefreshToken.deleteOne({ userId: decoded.id });
     }
     res.clearCookie("refreshToken");
     res.json({ message: "Logged out successfully" });
@@ -94,6 +97,7 @@ const logout = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 
 module.exports = { register, login, refresh, logout };

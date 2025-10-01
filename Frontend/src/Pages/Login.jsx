@@ -87,7 +87,6 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      {/* LEFT IMAGE CAROUSEL */}
       <aside className="login-image" aria-hidden="true">
         <div
           className="carousel-slide"
@@ -112,7 +111,6 @@ const Login = () => {
         </div>
       </aside>
 
-      {/* RIGHT FORM */}
       <main className="login-form" role="main">
         {message && <p className="api-message">{message}</p>}
 

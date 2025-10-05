@@ -33,12 +33,12 @@ const Login = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Update form data
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Register
+
   const handleSignup = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -59,7 +59,6 @@ const Login = () => {
     }
   };
 
-  // Login
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -70,7 +69,7 @@ const Login = () => {
           emailOrPhone: formData.emailOrPhone,
           password: formData.password,
         },
-        { withCredentials: true } // important to send cookies
+        { withCredentials: true } 
       );
       setMessage("Login successful!");
       localStorage.setItem("accessToken", res.data.accessToken);
@@ -79,7 +78,6 @@ const Login = () => {
     }
   };
 
-  // OTP login (dummy, just frontend)
   const handleOTP = (e) => {
     e.preventDefault();
     setMessage("OTP feature coming soon!");
